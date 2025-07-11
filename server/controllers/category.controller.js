@@ -11,7 +11,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
     secure: true
 });
-
+ 
 
 var imagesArr = [];
 export async function uploadCategoryImages(req,res) {
@@ -26,7 +26,12 @@ export async function uploadCategoryImages(req,res) {
                 unique_filename: false
             });
             imagesArr.push(result.secure_url);
-            fs.unlinkSync(i.path); 
+            try {
+                fs.unlinkSync(i.path);
+                } catch(e) {
+                console.warn('Failed to delete temp file', e);
+                }
+
         }
 
 
