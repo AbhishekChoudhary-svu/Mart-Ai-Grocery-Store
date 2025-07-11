@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import "./App.css";
 import "./Responsive.css";
 import Dashboard from "./pages/Dashboard";
@@ -38,26 +38,27 @@ function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
 
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token !== undefined && token !== null && token !== "") {
-      setIsLogin(true);
-      fetchDataFromApi(`/api/user/user-details`).then((res) => {
-        setUserData(res.data);
+   useEffect(() => {
+      const token = localStorage.getItem("accessToken");
+      if (token !== undefined && token !== null && token !== "") {
+        setIsLogin(true);
+        fetchDataFromApi(`/api/user/user-details`,).then((res) => {
+          setUserData(res.data);
+          
+            if (res?.response?.data?.message === "Invalid Login.") {
+              localStorage.removeItem("accessToken");
+              localStorage.removeItem("refreshToken");
+              openAlertBox("error", "Session Expired ! Login Again");
+              window.location.href="/login"
+              setIsLogin(false);
+            }       
+        });
+      } else {
+        setIsLogin(false);
+      }
+    }, [isLogin]);
 
-        if (res?.response?.data?.message === "Invalid Login.") {
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          openAlertBox("error", "Session Expired ! Login Again");
-          window.location.href = "/login";
 
-          setIsLogin(false);
-        }
-      });
-    } else {
-      setIsLogin(false);
-    }
-  }, [isLogin]);
 
 
 
@@ -83,7 +84,7 @@ function App() {
 
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: "/dasboard",
       exact: true,
       element: (
         <>
@@ -116,14 +117,14 @@ function App() {
       ),
     },
     {
-      path: "/login",
-      exact: true,
-      element: (
-        <>
-          <LoginPage />
-        </>
-      ),
-    },
+    path: "/",
+    element: <Navigate to="/login" replace />,
+  },
+  {
+    path: "/login",
+    exact: true,
+    element: <LoginPage />,
+  },
     {
       path: "/register",
       exact: true,

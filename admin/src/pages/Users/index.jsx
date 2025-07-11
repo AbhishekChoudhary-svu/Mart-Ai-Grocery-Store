@@ -1,7 +1,5 @@
 import { React, useEffect, useState } from "react";
-import Rating from "@mui/material/Rating";
 import SearchBox from "../../components/SearchBox";
-import { Link } from "react-router-dom";
 import { fetchDataFromApi } from "../../utils/api";
 import { HiOutlineMail } from "react-icons/hi";
 
