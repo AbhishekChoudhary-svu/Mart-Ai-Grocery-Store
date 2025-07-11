@@ -16,10 +16,7 @@ cloudinary.config({
 var imagesArr = [];
 export async function uploadCategoryImages(req,res) {
     try {
-        
         const image = req.files;
-       
-
      imagesArr = [];
 
         for (const i of image) {
@@ -29,12 +26,7 @@ export async function uploadCategoryImages(req,res) {
                 unique_filename: false
             });
             imagesArr.push(result.secure_url);
-            try {
-                fs.unlinkSync(i.path);
-                } catch(e) {
-                console.warn('Failed to delete temp file', e);
-                }
-
+            fs.unlinkSync(i.path); 
         }
 
 
