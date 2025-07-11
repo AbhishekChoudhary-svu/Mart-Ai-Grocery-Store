@@ -28,7 +28,7 @@ app.use(helmet({
 
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to the API' +  process.env.PORT });
+  res.json({ message: 'Mart Ai Server is Running on ' +  process.env.PORT });
 }); 
 app.use('/api/user', userRoutes);
 app.use('/api/category', categoryRouter);
