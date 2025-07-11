@@ -1,0 +1,144 @@
+
+body{
+    font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  background: #eeececdc;
+  overflow-x: hidden;
+}
+.container { width: 95%; margin:auto;}
+
+/* header .Top-strip{
+    border-top:1px solid rgba(0,0,0,0.1);
+    border-bottom:1px solid rgba(0,0,0,0.1);
+   
+} */
+.link:hover{
+    color: darkgreen;
+    
+}
+.searchBox input::placeholder{color: rgb(81, 79, 79);}
+
+.SliderHome{
+    overflow: hidden !important;
+}
+.swiper-button-prev , .swiper-button-next {
+    display: flex ;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    width: 45px;
+    min-width: 45px;
+    background: white;
+    border-radius: 100%;
+    box-shadow: 0 1px 3px rgb(131, 128, 128),0 1px 2px gray!important;
+}
+
+.swiper-button-prev::after , .swiper-button-next::after{
+    font-size: 18px !important;
+    color: darkgreen;
+    font-weight: 900;
+} 
+.homeCatSlider .swiper-button-prev ,.homeCatSlider .swiper-button-next {
+    height: 25px;
+    width: 25px;
+    min-width: 25px;
+}
+.homeCatSlider .swiper-button-prev::after ,.homeCatSlider .swiper-button-next::after{
+     font-size: 12px !important;
+    font-weight: 900;
+} 
+.homeCatSlider .swiper-button-prev{
+    left: 3px !important;
+}
+.homeCatSlider .swiper-button-next{
+    right: 3px !important;
+}
+.homeCatSlider .item{
+    border: 1px solid rgb(235, 235, 235);
+}
+.homeCatSlider .item:hover .imge{
+    transform: scale(1.1);
+    transition: all ease-in 0.2s;
+}
+
+
+.homeCatSlider .swiper-button-prev:hover ,.homeCatSlider .swiper-button-next:hover{
+    background: rgb(9, 165, 9) !important;
+} 
+.homeCatSlider .swiper-button-prev:hover::after ,.homeCatSlider .swiper-button-next:hover::after{
+    color: white !important;
+} 
+
+ .Mui-selected {
+    color: rgb(6, 147, 6) !important;
+}
+
+.MuiTabs-indicator{
+  background-color: rgb(6, 147, 6) !important;
+}
+
+.productslider .swiper-wrapper {
+    padding: 15px;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.swiper-pagination-bullet { background: #2fa22f !important;}
+
+
+ 
+.swiper-button-prev:hover , .swiper-button-next:hover{
+    background: rgb(9, 165, 9) !important;
+    
+} 
+ .swiper-button-prev:hover::after , .swiper-button-next:hover::after{
+    color: white !important;
+} 
+.homeSliderV2 .swiper-slide-active .info {
+  right: 10px !important;
+  opacity: 1 !important;
+}
+.box2 .MuiSvgIcon-root ,.box .MuiSvgIcon-root{
+    color: #2fa22f !important;
+}
+
+.Mui-Checkbox-root{
+    padding: 6px !important;
+}
+
+.itemViewAction button.active svg {
+    color :#2fa22f !important;
+}
+
+
+.CartPanel .MuiPaper-root {
+    width: 400px;
+}
+.AddressPanel .MuiPaper-root {
+    width: 500px;
+}
+.ReactCollapse--collapse {
+  transition: height 500ms;
+}
+button .MuiCircularProgress-root {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #4ffe95, #4ac702);
+  box-shadow: inset 1px 1px 3px rgba(0,0,0,0.3); /* deeper shadow for glassy effect */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #43e97b, #38f9d7);
+}

@@ -1,0 +1,45 @@
+body{
+     font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  background-color: #f1f1f1;
+}
+
+.ReactCollapse--collapse {
+  transition: height 400ms;
+}
+
+button .MuiCircularProgress-root {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+}
+
+.MuiButtonBase-root{
+  margin-right: 10px !important;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #4ffe95, #5dfe00);
+  box-shadow: inset 1px 1px 3px rgba(0,0,0,0.3); /* deeper shadow for glassy effect */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #43e97b, #38f9d7);
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  display: none !important;
+}
+
+input ,textarea,select {
+  background-color: white;
+}

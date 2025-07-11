@@ -1,0 +1,6 @@
+.productitem .title {
+    line-height: 20px;
+} 
+.productitem .actions .button svg{
+    pointer-events: none !important;
+}

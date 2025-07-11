@@ -1,0 +1,39 @@
+@media only screen and ( min-width :332px) and ( max-width:992px){
+    html,body{
+        overflow-x: hidden;
+    }
+    .swiper-button-next,
+.swiper-button-prev {
+  display: none !important;
+}
+
+.MuiTabs-flexContainer button {
+    font-size: 8px !important;
+    padding: 0px 8px !important;
+    
+}
+.CartPanel .MuiPaper-root {
+    width: 350px;
+}
+.AddressPanel .MuiPaper-root {
+    width: 350px;
+}
+
+.sidebarWrapper {
+  bottom: 0px !important;
+  opacity: 1 !important;
+}
+
+
+}
+
+/* Hide scrollbar for WebKit browsers */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE & Edge */
+  scrollbar-width: none;     /* Firefox */
+}

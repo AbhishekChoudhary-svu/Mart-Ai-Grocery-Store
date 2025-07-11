@@ -1,0 +1,19 @@
+.sidebar .scroll {
+    max-height: 250px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.range-slider .range-slider__thumb{
+    width: 14px !important;
+    height: 14px !important;
+    background: #2fa22f !important;
+}
+
+.range-slider {
+    height: 6px !important;
+    
+}
+.range-slider__range{
+    background: #2fa22f !important;
+}
