@@ -19,6 +19,11 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(cors({
+  origin: ['https://mart-ai-grocery-store-main.vercel.app', 'https://admart-admin-panel.vercel.app'],
+  credentials: true
+}));
+
 app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(helmet({
