@@ -57,7 +57,7 @@ const LoginPage = () => {
           localStorage.setItem("refreshToken", res?.data?.refreshToken);
 
           context.setIsLogin(true);
-          history("/");
+          history("/dashboard");
         } else {
           context.openAlertBox("error", res?.message);
           setIsLoading(false);
