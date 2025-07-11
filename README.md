@@ -3,7 +3,7 @@
 Smart AI-powered grocery shopping website with an admin panel to manage products, orders, and users.
 
 * 🛍️ **Customer site:** [[https://martai-customer.vercel.app](https://mart-ai-grocery-store-main.vercel.app/)]
-* ⚙️ **Admin panel:** [[https://martai-admin.vercel.app](https://admart-admin-panel.vercel.app)]
+* ⚙️ **Admin panel:**
 
 ## ✨ Features
 
