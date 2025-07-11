@@ -16,7 +16,11 @@ cloudinary.config({
 var imagesArr = [];
 export async function uploadCategoryImages(req,res) {
     try {
+         console.log(req.files)
+        console.log('cloud_name', process.env.CLOUDINARY_CLOUD_NAME);
         const image = req.files;
+       
+
      imagesArr = [];
 
         for (const i of image) {
