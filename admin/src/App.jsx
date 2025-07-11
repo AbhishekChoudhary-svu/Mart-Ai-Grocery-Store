@@ -84,7 +84,7 @@ function App() {
 
   const router = createBrowserRouter([
     {
-      path: "/dasboard",
+      path: "/dashboard",
       exact: true,
       element: (
         <>
