@@ -56,14 +56,14 @@ const logout = () => {
     overflow-x-hidden
   `}>
       <div  className="logo py-2 w-full">
-        <Link onClick={handleSidebarClose} to="/">
+        <Link onClick={handleSidebarClose} to="/dashboard">
           <img className="w-[150px]" src="/AdMart.png" alt="" />
         </Link>
       </div>
 
       <ul className="mt-4 ">
         <li>
-          <Link to="/" onClick={handleSidebarClose}>
+          <Link to="/dashboard" onClick={handleSidebarClose}>
           <Button className="w-full !py-2 hover:!bg-[#f1f1f1]  !capitalize  !justify-start !text-[rgba(0,0,0,0.7)] !text-[16px] !font-[600] flex gap-3 items-center">
             <MdOutlineSpaceDashboard className="text-[20px] font-[600]" />
             <span>Dashboard</span>

@@ -59,12 +59,23 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(5);
 
-  const totalPages = Math.ceil(productData.length / perPage);
-
-  const paginatedProducts = productData.slice(
-    (currentPage - 1) * perPage,
-    currentPage * perPage
-  );
+ const [searchQuery , setSearchQuery]= useState("")
+    
+      // filter by order ID, customer name, email etc. (you can customize)
+ const filteredproducts = productData?.filter(product =>
+   product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+   product.brand?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+   product.catName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+   product.subCatName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+   product.description?.toLowerCase().includes(searchQuery.toLowerCase())
+ );
+ 
+ const totalPages = Math.ceil(filteredproducts.length / perPage);
+ 
+ const paginatedProducts = filteredproducts.slice(
+   (currentPage - 1) * perPage,
+   currentPage * perPage
+ );
 
   const handleSearch = (query) => {
     console.log("Searching:", query);
@@ -195,10 +206,13 @@ const Products = () => {
       </select>
     </div>
     <div className="w-full mt-0 sm:mt-2">
-      <SearchBox onSearch={handleSearch} />
+      <SearchBox searchQuery={searchQuery}
+  setSearchQuery={setSearchQuery}
+  setCurrentPage={setCurrentPage}
+  placeholder="Search Your products..."  />
     </div>
   </div>
-</div>
+</div> 
 
 
 
