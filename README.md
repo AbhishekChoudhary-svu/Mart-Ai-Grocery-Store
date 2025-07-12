@@ -16,4 +16,5 @@ Smart AI-powered grocery shopping website with an admin panel to manage products
 
 React, Node.js, Express, MongoDB, Tailwind CSS, JWT / Firebase, Cloudinary
 
-
+* If you find any error or mistake please contact me here
+* 🔗 **Linkdin:** [[Abhishek Choudhary](www.linkedin.com/in/abhishekchoudhary-svu134)]
