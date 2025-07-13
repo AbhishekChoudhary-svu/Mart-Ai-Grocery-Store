@@ -2,7 +2,7 @@
 
 Smart AI-powered grocery shopping website with an admin panel to manage products, orders, and users.
 
-* 🛍️ **Customer site:** [[https://mart-ai-grocery-store-main.vercel.app](https://mart-ai-grocery-store-main.vercel.app/)]
+* 🛍️ **Client site:** [[https://mart-ai-grocery-store-main.vercel.app](https://mart-ai-grocery-store-main.vercel.app/)]
 * ⚙️ **Admin panel**
 
 ## ✨ Features
@@ -16,4 +16,5 @@ Smart AI-powered grocery shopping website with an admin panel to manage products
 
 React, Node.js, Express, MongoDB, Tailwind CSS, JWT / Firebase, Cloudinary
 
-
+* If you find any error or mistake please contact me here
+* 🔗 **Linkdin:** [[Abhishek Choudhary](https://www.linkedin.com/in/abhishekchoudhary-svu134)]
