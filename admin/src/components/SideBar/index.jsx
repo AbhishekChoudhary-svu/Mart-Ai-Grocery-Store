@@ -9,6 +9,7 @@ import { LiaShoppingBagSolid } from "react-icons/lia";
 import { RiProductHuntLine } from "react-icons/ri";
 import { TbLogout } from "react-icons/tb";
 import { FaAngleDown } from "react-icons/fa";
+import { Soup } from 'lucide-react';
 import { Collapse } from "react-collapse";
 import { MyContext } from "../../App";
 import { fetchDataFromApi } from "../../utils/api";
@@ -163,6 +164,30 @@ const logout = () => {
               <li className="w-full">
                 <Link to="/category/subCategories/add" onClick={handleSidebarClose}>
                 <Button className="!w-full !capitalize !justify-start !text-[rgba(0,0,0,0.6)] !pl-9 flex gap-3 !text-[14px] !font-[400]"><span className="block w-[5px] h-[5px] bg-[rgba(0,0,0,0.4)] rounded-full"></span>Add a Sub-Category</Button></Link>
+              </li>
+            </ul>
+          </Collapse>
+        </li>
+         <li>
+          <Button
+            className="w-full !py-2 hover:!bg-[#f1f1f1] !capitalize  !justify-start !text-[rgba(0,0,0,0.7)] !text-[16px] !font-[600] flex gap-3 items-center"
+            onClick={() => openSubmenu(5)}
+          >
+            <Soup className="text-[19px] font-[600]" />
+            <span>Recipe</span>
+            <span className="ml-auto w-[30px] h-[30px] flex items-center justify-center">
+              <FaAngleDown className={`transition-all ${submenuIndex===5 ? "rotate-180" : ""}`} />
+            </span>
+          </Button>
+          <Collapse isOpened={submenuIndex=== 5 ? true : false}>
+            <ul className="w-full">
+              <li className="w-full">
+                <Link to="/recipes" onClick={handleSidebarClose}>
+                <Button className="!w-full !capitalize !justify-start !text-[rgba(0,0,0,0.6)] !pl-9 flex gap-3 !text-[14px] !font-[400]"><span className="block w-[5px] h-[5px] bg-[rgba(0,0,0,0.4)] rounded-full"></span>Recipe List</Button></Link>
+              </li>
+              <li className="w-full">
+                <Link to="/recipe/add" onClick={handleSidebarClose}>
+                <Button className="!w-full !capitalize !justify-start !text-[rgba(0,0,0,0.6)] !pl-9 flex gap-3 !text-[14px] !font-[400]"><span className="block w-[5px] h-[5px] bg-[rgba(0,0,0,0.4)] rounded-full"></span>Add a Recipe</Button></Link>
               </li>
             </ul>
           </Collapse>

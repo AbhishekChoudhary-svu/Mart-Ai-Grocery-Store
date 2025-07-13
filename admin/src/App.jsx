@@ -25,6 +25,8 @@ import ProfilePage from "./pages/ProfilePage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import AdsBanner from "./pages/AdsBanner";
 import AddBannerForm from "./components/AddBannerForm";
+import AddRecipeForm from "./components/AddRecipeForm";
+import Recipes from "./pages/Recipes";
 
 const MyContext = createContext();
 
@@ -773,6 +775,105 @@ function App() {
                 } transition-all`}
               >
                 <ProfilePage />
+              </div>
+            </div>
+          </section>
+        </>
+      ),
+    },
+    {
+      path: "/recipes",
+      exact: true,
+      element: (
+        <>
+          <section className="main">
+            <Header />
+            <div className="ContentMain flex">
+              <div
+                className={`sidebarWrapper ${
+                  isSideBarOpen === true ? "w-[16%]" : "w-[0px] opacity-0"
+                } transition-all `}
+              >
+                <SideBar />
+                {isSideBarOpen && (
+                  <div
+                    onClick={() => setIsSideBarOpen(false)}
+                    className="fixed inset-0 bg-[rgba(0,0,0,0.5)]  z-40 lg:hidden"
+                  ></div>
+                )}
+              </div>
+              <div
+                 className={`contentRight py-4 px-5 ${
+                  isSideBarOpen === true ? "lg:w-[84%] w-[100%] " : "w-[100%]"
+                } transition-all`}
+              >
+                <Recipes />
+              </div>
+            </div>
+          </section>
+        </>
+      ),
+    },
+    {
+      path: "/recipe/edit/:id",
+      exact: true,
+      element: (
+        <>
+          <section className="main">
+            <Header />
+            <div className="ContentMain flex">
+              <div
+                className={`sidebarWrapper ${
+                  isSideBarOpen === true ? "w-[16%]" : "w-[0px] opacity-0"
+                } transition-all `}
+              >
+                <SideBar />
+                {isSideBarOpen && (
+                  <div
+                    onClick={() => setIsSideBarOpen(false)}
+                    className="fixed inset-0 bg-[rgba(0,0,0,0.5)]  z-40 lg:hidden"
+                  ></div>
+                )}
+              </div>
+              <div
+                 className={`contentRight py-4 px-5 ${
+                  isSideBarOpen === true ? "lg:w-[84%] w-[100%] " : "w-[100%]"
+                } transition-all`}
+              >
+                <AddRecipeForm />
+              </div>
+            </div>
+          </section>
+        </>
+      ),
+    },
+    {
+      path: "/recipe/add",
+      exact: true,
+      element: (
+        <>
+          <section className="main">
+            <Header />
+            <div className="ContentMain flex">
+              <div
+                className={`sidebarWrapper ${
+                  isSideBarOpen === true ? "w-[16%]" : "w-[0px] opacity-0"
+                } transition-all `}
+              >
+                <SideBar />
+                {isSideBarOpen && (
+                  <div
+                    onClick={() => setIsSideBarOpen(false)}
+                    className="fixed inset-0 bg-[rgba(0,0,0,0.5)]  z-40 lg:hidden"
+                  ></div>
+                )}
+              </div>
+              <div
+                 className={`contentRight py-4 px-5 ${
+                  isSideBarOpen === true ? "lg:w-[84%] w-[100%] " : "w-[100%]"
+                } transition-all`}
+              >
+                <AddRecipeForm/>
               </div>
             </div>
           </section>

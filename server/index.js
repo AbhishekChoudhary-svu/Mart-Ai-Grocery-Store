@@ -14,6 +14,7 @@ import addressRouter from './routes/address.route.js';
 import homeSliderRouter from './routes/homeSlider.route.js';
 import adsBannerRouter from './routes/adsBanner.route.js';
 import orderRouter from './routes/order.route.js';
+import recipeRouter from './routes/recipe.route.js';
 dotenv.config();
 
 const app = express();
@@ -39,6 +40,7 @@ app.use('/api/address', addressRouter);
 app.use('/api/homeSlides', homeSliderRouter);
 app.use('/api/Banner', adsBannerRouter);
 app.use('/api/order', orderRouter);
+app.use('/api/recipe', recipeRouter);
 
 
 connectDB().then(() => {
