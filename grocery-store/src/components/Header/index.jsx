@@ -13,7 +13,7 @@ import {MyContext} from "../../App"
 import Button from "@mui/material/Button";
 import { FaUserCircle } from "react-icons/fa";
 import { useState, useRef, useEffect } from "react"
-import { User, ShoppingBag, Heart, Settings, CreditCard, AlignJustify } from "lucide-react"
+import { User, ShoppingBag, Heart, Settings,Soup, CreditCard, AlignJustify } from "lucide-react"
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -238,13 +238,15 @@ const [anchorEl, setAnchorEl] = useState(null);
              }
               
               <li>
-                <Tooltip title="SmartCart Ai" arrow>
-                  <IconButton aria-label="cart" onClick={()=>context.openAlertBox("success","SmartCart Ai Feature Coming Soon..")}>
-                    <StyledBadge badgeContent={4} color="success">
-                      <TiShoppingCart />
+                <Link to="/recipes">
+                <Tooltip title="Recipes" arrow>
+                  <IconButton aria-label="recipe" >
+                    <StyledBadge badgeContent={0} color="success">
+                      <Soup />
                     </StyledBadge>
                   </IconButton>
                 </Tooltip>
+                </Link>
               </li>
               <li className="hidden lg:block">
                 <Link to="/wishlist">

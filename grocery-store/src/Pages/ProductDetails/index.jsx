@@ -17,6 +17,7 @@ const ProductDetails = () => {
   const [reviewsCount, setReviewsCount] = useState(0);
 
   useEffect(() => {
+    window.scrollTo(0,0)
     if (id) {
       fetchDataFromApi(`/api/product/${id}`).then((res) => {
         setProductData(res.product);

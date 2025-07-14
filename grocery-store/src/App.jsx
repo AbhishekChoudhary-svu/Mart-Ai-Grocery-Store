@@ -22,6 +22,8 @@ import ResetPass from "./Pages/ResetPass";
 import toast, { Toaster } from "react-hot-toast";
 import { fetchDataFromApi, postData } from "./utils/api";
 import SearchPage from "./Pages/SearchPage";
+import RecipePage from "./Pages/RecipePage";
+import RecipeDetailPage from "./Pages/RecipeDetailPage";
 
 
 
@@ -48,6 +50,7 @@ function App() {
    const [catData, setCatData] = useState([]);
    const [cartData, setCartData] = useState([]);
    const [listData, setListData] = useState([]);
+   const [recipeData, setRecipeData] = useState([]);
    const [searchData, setSearchData] = useState([]);
    const [windowWidth, setWindowWidth]= useState(window.innerWidth)
    const [openFilters, setOpenFilters]= useState(false)
@@ -86,6 +89,9 @@ function App() {
     useEffect(() => {
       fetchDataFromApi("/api/category/").then((res) => {
         setCatData(res?.categories);
+      }); 
+      fetchDataFromApi("/api/recipe/").then((res) => {
+        setRecipeData(res || []);
       }); 
 
       const handleResize = () => {
@@ -189,7 +195,9 @@ function App() {
     openFilters,
     setOpenFilters,
     openSearch,
-    setOpenSearch
+    setOpenSearch,
+    recipeData,
+    setRecipeData
 
   };
 
@@ -202,6 +210,8 @@ function App() {
   <Route element={<Layout />}>
     <Route path="/" element={<Home />} />
     <Route path="/products" element={<ProductListing />} />
+    <Route path="/recipes" element={<RecipePage />} />
+    <Route path="/recipe/:id" element={<RecipeDetailPage />} />
     <Route path="/product/:id" element={<ProductDetails />} />
     <Route path="/cart" element={<CartPage />} />
     <Route path="/checkout" element={<CheckoutPage />} />
