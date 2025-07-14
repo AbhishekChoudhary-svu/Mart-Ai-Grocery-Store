@@ -133,6 +133,30 @@ function App() {
     })
 
   }
+  const addMultipleToCartItem = (products, userId) => {
+  if (!userId) {
+    openAlertBox("error", "Login First");
+    return;
+  }
+
+  // Prepare data: products must be [{ productId, quantity }]
+  const items = products.map(p => ({
+    productId: p._id,
+    quantity: 1   // or set your quantity dynamically
+  }));
+
+  postData("/api/cart/addAll", { items }).then((res) => {
+    if (res.success === true) {
+      openAlertBox("success", res.message || "All items added to cart!");
+      getCartItemData();
+    } else {
+      openAlertBox("error", res.message || "Something went wrong");
+    }
+  }).catch((err) => {
+    openAlertBox("error", err?.message || "Failed to add items to cart");
+  });
+};
+
   const handleToAddList =(item)=>{
     if(userData._id===undefined){
        openAlertBox("error", "Login First");
@@ -197,7 +221,8 @@ function App() {
     openSearch,
     setOpenSearch,
     recipeData,
-    setRecipeData
+    setRecipeData,
+    addMultipleToCartItem
 
   };
 

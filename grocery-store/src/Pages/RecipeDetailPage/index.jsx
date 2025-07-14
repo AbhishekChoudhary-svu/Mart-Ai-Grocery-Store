@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ShoppingCart } from "lucide-react";
 import { fetchDataFromApi } from "../../utils/api";
-
+import {MyContext} from "../../App"
 const RecipeDetailPage = () => {
+  const context = useContext(MyContext)
   const { id } = useParams();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [productData, setProductData] = useState(null);
@@ -23,10 +24,11 @@ const RecipeDetailPage = () => {
   const totalPrice =
     recipe?.products?.reduce((sum, item) => sum + item.price, 0) || 0;
 
-  const handleAddAllToCart = async () => {
+  const handleAddAllToCart =  (products,userId) => {
     setIsAddingToCart(true);
     // fake delay
-    await new Promise((r) => setTimeout(r, 1000));
+    context.addMultipleToCartItem(products, userId);
+
     setIsAddingToCart(false);
   };
 
@@ -76,22 +78,22 @@ const RecipeDetailPage = () => {
               </div>
 
               <button
-                onClick={handleAddAllToCart}
-                disabled={isAddingToCart}
+                onClick={() => handleAddAllToCart(recipe.products, context?.userData?._id)}
                 className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded text-sm sm:text-base font-semibold transition-colors flex-1"
               >
                 <ShoppingCart className="h-5 w-5" />
-                {isAddingToCart ? "Adding..." : "Add All to Cart"}
+                {isAddingToCart ? "Adding..." : "Add All Items to Cart"}
               </button>
             </div>
           </div>
         </div>
 
         {/* Ingredients grid */}
-        <section className="mt-10 sm:mt-12">
-          <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6">
+        <section className="mt-8 sm:mt-10">
+          <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-1 ">
             Ingredients Included
           </h3>
+          <p className="mb-4 sm:mb-6 font-[500] text-xs lg:text-sm"><span className="text-black">Note :</span> You Can Add or Remove Item Quantity From Cart</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
             {recipe.products.map((ing, idx) => (
               <Link key={idx} to={`/product/${ing._id}`}>
