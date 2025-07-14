@@ -59,6 +59,63 @@ export async function addToCart(req, res) {
     res.status(500).json({ message: error.message});
   }
 }
+export async function addMultipleToCart(req, res) {
+  try {
+    const userId = req.userId; 
+    const { items } = req.body; // items: [{ productId, quantity }]
+
+    if (!userId || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ message: "User ID and products list are required" });
+    }
+
+    const updatedCartItems = [];
+
+    for (const item of items) {
+      const { productId, quantity } = item;
+      if (!productId || !quantity || quantity <= 0) continue; // skip invalid items
+
+      // Check if product exists
+      const product = await ProductModel.findById(productId);
+      if (!product) continue; // skip if product not found
+
+      const price = product.price;
+      const subTotal = price * quantity;
+
+      // Check if item already in cart
+      let existingCartItem = await CartModel.findOne({ userId, productId });
+      if (existingCartItem) {
+        existingCartItem.quantity += quantity;
+        existingCartItem.subTotal = existingCartItem.quantity * price;
+        await existingCartItem.save();
+        updatedCartItems.push(existingCartItem);
+      } else {
+        const newCartItem = new CartModel({
+          userId,
+          productId,
+          productName: product.name,
+          image: product.images[0],
+          price,
+          countInStock: product.countInStock,
+          quantity,
+          subTotal
+        });
+        await newCartItem.save();
+        updatedCartItems.push(newCartItem);
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Items added to cart successfully",
+      cartItems: updatedCartItems
+    });
+
+  } catch (error) {
+    console.error("Error adding multiple items to cart:", error);
+    res.status(500).json({ message: error.message });
+  }
+}
+
 
 
 export async function getCartItems(req, res) {
