@@ -105,7 +105,7 @@ export async function selectAddress(req, res) {
     res.status(200).json({ success: true, message: "Selected address updated" });
 
   } catch (error) {
-    console.error("Error updating selected address:", error);
+    
     res.status(500).json({ success: false, message: error.message });
   }
 }

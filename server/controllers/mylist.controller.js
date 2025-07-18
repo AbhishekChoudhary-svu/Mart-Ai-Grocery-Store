@@ -45,7 +45,7 @@ export async function addToMyList(req, res) {
             success:true
         });
     } catch (error) {
-        console.error("Error adding to My List:", error);
+        
         res.status(500).json({ message: "Internal server error" });
     }
 }
@@ -63,7 +63,7 @@ export async function deleteFromMyList(req, res) {
     
     res.status(200).json({ message: "Item removed from My List", success: true, data: deletedItem });
   } catch (error) {
-    console.error("Error deleting item from My List:", error);
+    
     res.status(500).json({ message: "Internal server error", success: false });
   }
 }
@@ -76,7 +76,7 @@ export async function getMyList(req, res) {
 
         res.status(200).json(items);
     } catch (error) {
-        console.error("Error fetching My List:", error);
+        
         res.status(500).json({ message: "Internal server error" });
     }
 }

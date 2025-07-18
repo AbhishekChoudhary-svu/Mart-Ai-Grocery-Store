@@ -32,7 +32,7 @@ export async function uploadCategoryImages(req,res) {
 
         return res.status(200).json({ message: "Images uploaded successfully", images: imagesArr });
     } catch (error) {
-        console.error("Error uploading images:", error);
+       
         return res.status(500).json({ message: "Failed to upload images", error: error.message });
     }
 }
@@ -54,7 +54,7 @@ export async function createCategory(req, res) {
         return res.status(201).json({ message: "Category created successfully",success:true, category: savedCategory }); 
     }
     catch (error) {
-        console.error("Error creating category:", error);
+        
         return res.status(500).json({ message: "Failed to create category", error: error.message });
     }
 }
@@ -80,7 +80,7 @@ export async function getAllCategories(req, res) {
             return res.status(200).json({ message: "Categories fetched successfully", categories: rootCategories });
           
         } catch (error) {
-            console.error("Error fetching categories:", error);
+            
             return res.status(500).json({ message: "Failed to fetch categories", error: error.message });
         }
 }
@@ -90,7 +90,7 @@ export async function getCategoriesCount(req, res) {
         const categoriesCount = await CategoryModel.countDocuments({parentId: null});
         return res.status(200).json({ message: "Category count fetched successfully", categoriesCount });
     } catch (error) {
-        console.error("Error fetching category count:", error);
+        
         return res.status(500).json({ message: "Failed to fetch category count", error: error.message });
     }
 }
@@ -118,7 +118,7 @@ export async function getSubCategoriesCount(req, res) {
         
         
     } catch (error) {
-        console.error("Error fetching sub-category count:", error);
+        
         return res.status(500).json({ message: "Failed to fetch sub-category count", error: error.message });
     }
 }
@@ -133,7 +133,7 @@ export async function getCategoryById(req, res) {
         return res.status(200).json({ message: "Category fetched successfully", category });
     }
     catch (error) {
-        console.error("Error fetching category by ID:", error);
+        
         return res.status(500).json({ message: "Failed to fetch category", error: error.message });
     }
 } 
@@ -168,7 +168,7 @@ export async function deleteCatImages(req, res) {
       error: false,
     });
   } catch (error) {
-    console.error("Error deleting image from Cloudinary:", error);
+    
     return res.status(500).json({ message: "Internal server error", error: true });
   }
 }
@@ -204,7 +204,7 @@ export async function deleteCategory(req, res) {
     
         return res.status(200).json({ message: "Category deleted successfully", success:true, error:false, category: deletedCategory });
     } catch (error) {
-        console.error("Error deleting category:", error);
+        
         return res.status(500).json({ message: "Failed to delete category", error: error.message });
     }
 }
@@ -227,7 +227,7 @@ export async function updateCategory(req, res) {
         return res.status(200).json({ message: "Category updated successfully", category: updatedCategory });
     }
     catch (error) {
-        console.error("Error updating category:", error);
+        
         return res.status(500).json({ message: "Failed to update category", error: error.message });
     }
 }
@@ -252,7 +252,7 @@ export async function deleteSubCategory(req, res) {
       message: "Sub-category deleted successfully",
     });
   } catch (error) {
-    console.error("Error deleting sub-category:", error);
+    
     return res.status(500).json({
       success: false,
       message: "Failed to delete sub-category",
@@ -282,7 +282,7 @@ export const updateSubCategory = async (req, res) => {
 
     res.status(200).json({ success: true, message: "Sub-category updated successfully" });
   } catch (error) {
-    console.error("Update sub-category error:", error);
+    
     res.status(500).json({ success: false, message: "Server error" });
   }
 };

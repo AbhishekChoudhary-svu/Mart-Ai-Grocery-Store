@@ -29,7 +29,7 @@ export async function uploadRecipeImages(req, res) {
 
     return res.status(200).json({ message: "Images uploaded successfully", images: imagesArr });
   } catch (error) {
-    console.error("Error uploading images:", error);
+    
     return res.status(500).json({ message: "Failed to upload images", error: error.message });
   }
 }
@@ -50,7 +50,7 @@ export const createRecipe = async (req, res) => {
     const savedRecipe = await newRecipe.save();
     res.status(201).json(savedRecipe);
   } catch (error) {
-    console.error("Error creating recipe:", error);
+    
     res.status(500).json({ message: "Failed to create recipe", error: error.message });
   }
 };
@@ -129,7 +129,7 @@ export async function deleteRecipeImages(req, res) {
       error: false,
     });
   } catch (error) {
-    console.error("Error deleting image from Cloudinary:", error);
+    
     return res.status(500).json({ message: "Internal server error", error: true });
   }
 }

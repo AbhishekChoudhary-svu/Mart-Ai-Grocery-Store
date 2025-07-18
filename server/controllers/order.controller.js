@@ -78,7 +78,7 @@ if (user) {
       order: newOrder
     });
   } catch (error) {
-    console.error("Error creating order:", error);
+    
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -100,7 +100,7 @@ export const getUserOrders = async (req, res) => {
       data:orders
     });
   } catch (error) {
-    console.error("Error fetching user orders:", error);
+    
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -119,7 +119,7 @@ export const getAllOrders = async (req, res) => {
       data: orders,
     });
   } catch (error) {
-    console.error("Error fetching all orders:", error);
+    
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };

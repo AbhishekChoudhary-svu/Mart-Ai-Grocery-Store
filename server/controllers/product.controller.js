@@ -33,7 +33,7 @@ export async function uploadProductImages(req,res) {
 
         return res.status(200).json({ message: "Images uploaded successfully", images: imagesArr });
     } catch (error) {
-        console.error("Error uploading images:", error);
+        
         return res.status(500).json({ message: "Failed to upload images", error: error.message });
     }
 }
@@ -78,7 +78,7 @@ export async function createProduct(req, res) {
 
         return res.status(201).json({ message: "Product created successfully", product: newProduct });
     } catch (error) {
-        console.error("Error creating product:", error);
+        
         return res.status(500).json({ message: "Failed to create product", error: error.message });
     }
 }
@@ -101,7 +101,7 @@ export async function getAllProducts(req, res) {
 
         return res.status(200).json({products:products,totalPages: totalPages,page:page});
     } catch (error) {
-        console.error("Error fetching products:", error);
+        
         return res.status(500).json({ message: "Failed to fetch products", error: error.message });
     }
 }
@@ -129,7 +129,7 @@ export async function getAllProductsByCatId(req, res) {
 
         return res.status(200).json({products:products,totalPages: totalPages,page:page});
     } catch (error) {
-        console.error("Error fetching products:", error);
+        
         return res.status(500).json({ message: "Failed to fetch products", error: error.message });
     }
 }
@@ -157,7 +157,7 @@ export async function getAllProductsByCatName(req, res) {
 
         return res.status(200).json({products:products,totalPages: totalPages,page:page});
     } catch (error) {
-        console.error("Error fetching products:", error);
+        
         return res.status(500).json({ message: "Failed to fetch products", error: error.message });
     }
 }
@@ -185,7 +185,7 @@ export async function getAllProductsBySubCatId(req, res) {
 
         return res.status(200).json({products:products,totalPages: totalPages,page:page});
     } catch (error) {
-        console.error("Error fetching products:", error);
+        
         return res.status(500).json({ message: "Failed to fetch products", error: error.message });
     }
 }
@@ -213,7 +213,7 @@ export async function getAllProductsBySubCatName(req, res) {
 
         return res.status(200).json({products:products,totalPages: totalPages,page:page});
     } catch (error) {
-        console.error("Error fetching products:", error);
+        
         return res.status(500).json({ message: "Failed to fetch products", error: error.message });
     }
 }
@@ -241,7 +241,7 @@ export async function getAllProductsByThirdSubCatId(req, res) {
 
         return res.status(200).json({products:products,totalPages: totalPages,page:page});
     } catch (error) {
-        console.error("Error fetching products:", error);
+        
         return res.status(500).json({ message: "Failed to fetch products", error: error.message });
     }
 }
@@ -269,7 +269,7 @@ export async function getAllProductsByThirdSubCatName(req, res) {
 
         return res.status(200).json({products:products,totalPages: totalPages,page:page});
     } catch (error) {
-        console.error("Error fetching products:", error);
+        
         return res.status(500).json({ message: "Failed to fetch products", error: error.message });
     }
 }
@@ -316,7 +316,7 @@ export async function getAllProductsByPrice(req,res){
 
 
 }catch (error) {
-        console.error("Error fetching products by price:", error);
+        
         return res.status(500).json({ message: "Failed to fetch products by price", error: error.message });
     }
 }
@@ -354,7 +354,7 @@ export async function getAllProductsByRating(req, res) {
 
         return res.status(200).json({products:products,totalPages: totalPages,page:page});
     } catch (error) {
-        console.error("Error fetching products:", error);
+        
         return res.status(500).json({ message: "Failed to fetch products", error: error.message });
     }
 }
@@ -364,7 +364,7 @@ export async function getAllProductsCount(req, res) {
         const totalProducts = await ProductModel.countDocuments();
         return res.status(200).json({ count: totalProducts });
     } catch (error) {
-        console.error("Error fetching product count:", error);
+        
         return res.status(500).json({ message: "Failed to fetch product count", error: error.message });
     }
 }
@@ -377,7 +377,7 @@ export async function getAllFeaturedProducts(req, res) {
         }
         return res.status(200).json({ products: products });
     } catch (error) {
-        console.error("Error fetching featured products:", error);
+        
         return res.status(500).json({ message: "Failed to fetch featured products", error: error.message });
     }
 }
@@ -408,7 +408,7 @@ export async function deleteProduct(req, res) {
         return res.status(200).json({ message: "Product deleted successfully" });
        
     } catch (error) {
-        console.error("Error deleting images:", error);
+        
         return res.status(500).json({ message: "Failed to delete images", error: error.message });
     }
 }
@@ -451,7 +451,7 @@ export async function deleteMultipleProduct(req, res) {
       deletedCount: result.deletedCount,
     });
   } catch (error) {
-    console.error("Error deleting multiple products:", error);
+    
     return res.status(500).json({ message: "Server error", error: error.message });
   }
 }
@@ -470,7 +470,7 @@ export async function getProductById(req, res) {
 
         return res.status(200).json({ product: product });
     } catch (error) {
-        console.error("Error fetching product:", error);
+        
         return res.status(500).json({ message: "Failed to fetch product", error: error.message });
     }
 }
@@ -506,7 +506,7 @@ export async function deleteProductImages(req, res) {
       error: false,
     });
   } catch (error) {
-    console.error("Error deleting image from Cloudinary:", error?.response || error.message || error);
+    
     return res.status(500).json({ message: "Internal server error", error: true });
   }
 }
@@ -558,7 +558,7 @@ export async function updateProduct(req, res) {
 
     return res.status(200).json({ message: "Product updated successfully", product });
   } catch (error) {
-    console.error("Error updating the product:", error);
+    
     return res.status(500).json({ message: "Failed to update the product", error: error.message });
   }
 }
@@ -618,7 +618,7 @@ export async function filterProducts(req, res) {
       totalPages: Math.ceil(total / limit)
     });
   } catch (error) {
-    console.error("Error filtering products:", error);
+    
     res.status(500).json({ success: false, message: "Server error" });
   }
 }
@@ -693,7 +693,7 @@ export async function searchProducts(req, res) {
       success: true
     });
   } catch (error) {
-    console.error("Search error:", error);
+    
     res.status(500).json({ message: 'Server error' });
   }
 }

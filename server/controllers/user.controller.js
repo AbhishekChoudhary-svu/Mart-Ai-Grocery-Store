@@ -132,7 +132,7 @@ export async function verifyEmailController (req, res) {
 
 
     } catch (error) {
-        console.error('Error verifying email:', error);
+        
         return res.status(500).json({ message: 'Internal server error' });
     }
 }
@@ -313,7 +313,7 @@ export async function loginUserController (req, res) {
         });
 
     } catch (error) {
-        console.error('Error logging in user:', error);
+        
         return res.status(500).json({ message: 'Internal server error' });
     }
 }
@@ -344,7 +344,7 @@ export async function logoutUserController (req, res) {
         });
 
     } catch (error) {
-        console.error('Error logging out user:', error);
+        
         return res.status(500).json({ message: 'Internal server error' });
     }
 }
@@ -396,11 +396,9 @@ export async function useAvatarController(req, res) {
             
             if (fs.existsSync(image[i].path)) {
                 fs.unlinkSync(image[i].path);
-            } else {
-                console.warn(`File not found: ${image[i].path}`);
-            }
+            } 
 
-            console.log('Image uploaded:', result.secure_url);
+            
         }
 
         user.avatar = imagesArr[0];
@@ -412,7 +410,7 @@ export async function useAvatarController(req, res) {
         });
 
     } catch (error) {
-        console.error('Error updating avatar:', error);
+        
         return res.status(500).json({ message: 'Internal server error' });
     }
 }
@@ -432,7 +430,7 @@ export async function removeAvatarController(req, res) {
         error: false
       });
     } catch (error) {
-      console.error('Error deleting image from Cloudinary:', error);
+      
       return res.status(500).json({ message: 'Internal server error' });
     }
   }
@@ -548,7 +546,7 @@ export async function forgetPasswordController(req, res) {
     
 
     } catch (error) {
-        console.error('Error in forgot password:', error);
+        
         return res.status(500).json({ message: 'Internal server error' });
     }
 }
@@ -593,7 +591,7 @@ export async function verifyForgetPasswordOtpController(req, res) {
         });
 
     } catch (error) {
-        console.error('Error verifying OTP:', error);
+        
         return res.status(500).json({ message: 'Internal server error' });
     }
 }
@@ -641,7 +639,7 @@ export async function resetPasswordController(req, res) {
         });
 
     } catch (error) {
-        console.error('Error resetting password:', error);
+        
         return res.status(500).json({ message: 'Internal server error' });
     }
 }
@@ -694,7 +692,7 @@ export async function refreshTokenController(req, res) {
         });
 
     } catch (error) {
-        console.error('Error refreshing tokens:', error);
+        
         return res.status(500).json({ message: 'Internal server error' });
     }
 }
@@ -720,7 +718,7 @@ export async function getUserDetailsController(req, res) {
 
     }
     catch (error) {
-        console.error('Error retrieving user details:', error);
+        
         return res.status(500).json({ message: 'Internal server error' });
     }
  }
@@ -820,7 +818,7 @@ export async function getAllUsersWithOrderCount(req, res) {
       data: usersWithOrderCount
     });
   } catch (error) {
-    console.error(error);
+    
     res.status(500).json({
       success: false,
       message: "Failed to fetch users with order count",

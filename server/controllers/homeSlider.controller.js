@@ -33,7 +33,7 @@ export async function uploadHomeSliderImages(req,res) {
 
         return res.status(200).json({ message: "Images uploaded successfully", images: imagesArr });
     } catch (error) {
-        console.error("Error uploading images:", error);
+        
         return res.status(500).json({ message: "Failed to upload images", error: error.message });
     }
 }
@@ -50,7 +50,7 @@ export async function addHomeSlider(req, res) {
         return res.status(201).json({ message: "HomeSlider Added successfully",success:true, Slider: saveSlider }); 
     }
     catch (error) {
-        console.error("Error creating HomeSlider:", error);
+        
         return res.status(500).json({ message: "Failed to create HomeSlider", error: error.message });
     }
 }
@@ -65,7 +65,7 @@ export async function getHomeSlides(req, res) {
             slides:slides
         });
     } catch (error) {
-        console.error("Error fetching slides:", error);
+        
         return res.status(500).json({ message: "Failed to fetch slides", error: error.message });
     }
 }
@@ -80,7 +80,7 @@ export async function getSlidesById(req, res) {
         return res.status(200).json({ message: "slides fetched successfully", slides });
     }
     catch (error) {
-        console.error("Error fetching slides by ID:", error);
+        
         return res.status(500).json({ message: "Failed to fetch slides", error: error.message });
     }
 } 
@@ -115,7 +115,7 @@ export async function deleteSlidesImages(req, res) {
       error: false,
     });
   } catch (error) {
-    console.error("Error deleting image from Cloudinary:", error);
+    
     return res.status(500).json({ message: "Internal server error", error: true });
   }
 }
@@ -164,7 +164,7 @@ export async function updateSlides(req, res) {
         return res.status(200).json({ message: "Slides updated successfully", Slides: updatedSlides });
     }
     catch (error) {
-        console.error("Error updating category:", error);
+        
         return res.status(500).json({ message: "Failed to update Slides", error: error.message });
     }
 }
@@ -214,7 +214,7 @@ export async function deleteMultipleHomeSliders(req, res) {
       deletedCount: result.deletedCount,
     });
   } catch (error) {
-    console.error("Error deleting multiple sliders:", error);
+    
     return res.status(500).json({ message: "Server error", error: error.message });
   }
 }

@@ -33,7 +33,7 @@ export async function uploadBannerImages(req,res) {
 
         return res.status(200).json({ message: "Images uploaded successfully", images: imagesArr });
     } catch (error) {
-        console.error("Error uploading images:", error);
+        
         return res.status(500).json({ message: "Failed to upload images", error: error.message });
     }
 }
@@ -54,7 +54,7 @@ export async function addBanner(req, res) {
         return res.status(201).json({ message: "Banner Added successfully",success:true, banner: saveBanner }); 
     }
     catch (error) {
-        console.error("Error creating Banner:", error);
+        
         return res.status(500).json({ message: "Failed to create Banner", error: error.message });
     }
 }
@@ -69,7 +69,7 @@ export async function getBanner(req, res) {
             banner:banner
         });
     } catch (error) {
-        console.error("Error fetching Banner:", error);
+        
         return res.status(500).json({ message: "Failed to fetch Banner", error: error.message });
     }
 }
@@ -84,7 +84,7 @@ export async function getBannerById(req, res) {
         return res.status(200).json({ message: "Banner fetched successfully", banner });
     }
     catch (error) {
-        console.error("Error fetching Banner by ID:", error);
+        
         return res.status(500).json({ message: "Failed to fetch Banner", error: error.message });
     }
 } 
@@ -119,7 +119,7 @@ export async function deleteBannerImages(req, res) {
       error: false,
     });
   } catch (error) {
-    console.error("Error deleting image from Cloudinary:", error);
+    
     return res.status(500).json({ message: "Internal server error", error: true });
   }
 }
@@ -170,7 +170,7 @@ export async function updateBanner(req, res) {
         return res.status(200).json({ message: "Banner updated successfully", banner: updatedBanner });
     }
     catch (error) {
-        console.error("Error updating Banner:", error);
+        
         return res.status(500).json({ message: "Failed to update Banner", error: error.message });
     }
 }
@@ -220,7 +220,7 @@ export async function deleteMultipleBanner(req, res) {
       deletedCount: result.deletedCount,
     });
   } catch (error) {
-    console.error("Error deleting multiple Banner:", error);
+    
     return res.status(500).json({ message: "Server error", error: error.message });
   }
 }

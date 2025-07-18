@@ -55,7 +55,7 @@ export async function addToCart(req, res) {
     });
 
   } catch (error) {
-    console.error("Error adding to cart:", error);
+    
     res.status(500).json({ message: error.message});
   }
 }
@@ -111,7 +111,7 @@ export async function addMultipleToCart(req, res) {
     });
 
   } catch (error) {
-    console.error("Error adding multiple items to cart:", error);
+    
     res.status(500).json({ message: error.message });
   }
 }
@@ -131,7 +131,7 @@ export async function getCartItems(req, res) {
             success:true
         });
     } catch (error) {
-        console.error("Error fetching cart items:", error);
+        
         res.status(500).json({ message: "Internal server error" });
     }
 }
@@ -163,7 +163,7 @@ export async function updateCartItem(req, res) {
       message: "Cart item updated successfully"
     });
   } catch (error) {
-    console.error("Error updating cart item:", error);
+    
     res.status(500).json({ message: "Internal server error" });
   }
 }
@@ -188,7 +188,7 @@ export async function deleteCartItem(req, res) {
             success:true
         });
     } catch (error) {
-        console.error("Error deleting cart item:", error);
+        
         res.status(500).json({ message: "Internal server error" });
     }
 }
