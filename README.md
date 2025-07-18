@@ -11,6 +11,7 @@ Smart AI-powered grocery shopping website with an admin panel to manage products
 * Cart & checkout
 * Manage products, categories, users & orders in admin
 * Secure authentication
+* Added "Recipe Kit" all items add to cart with just one click.
 
 ## ⚙️ Stack
 
