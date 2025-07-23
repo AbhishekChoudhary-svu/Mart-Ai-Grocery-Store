@@ -1,4 +1,4 @@
-# Mart AI – AI-Powered Grocery Store with Admin Panel
+# Mart AI – Grocery Store with Admin Panel
 
 Mart AI is a modern, intelligent grocery shopping platform designed to provide a seamless experience for both customers and administrators. The solution integrates AI-powered features to enhance product discovery and shopping convenience while offering a comprehensive admin panel to efficiently manage products, orders, and users.
 
