@@ -39,7 +39,7 @@ useEffect(()=>{
           </div>
           <div className="col2 w-full xl:w-[80%]">
             
-            <ul className="hidden lg:flex items-center gap-6 nav">
+            <ul className="hidden lg:flex items-center  nav overflow-x-auto gap-3 hide-scrollbar">
               {catData.length !== 0 && catData.map((cat,idx)=>{
                 return(
                       <li key={idx} className="list-none relative">
