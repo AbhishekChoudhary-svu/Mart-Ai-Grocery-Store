@@ -173,7 +173,7 @@ const ProductItem = (props) => {
                 border-2 border-green-600
                 hover:from-[#1e7e34] hover:to-[#1c7430]
                 text-[#28a745] font-semibold
-                xl:px-7 px-3 xl:py-2 py-1 rounded-md  
+                xl:px-2 px-3 xl:py-2 py-1 rounded-md  
                 shadow-md hover:shadow-lg
                 transform hover:scale-105 text-[12px] xl:text-[15px]
                 transition duration-200 ease-in-out
