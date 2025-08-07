@@ -66,7 +66,7 @@ const ProductDetails = () => {
     <section className=" ">
       <div className="container ">
         <div className="min-h-screen bg-white font-sans">
-          <div className="max-w-7xl lg:mx-auto p-4  lg:px-0 lg:py-8">
+          <div className="max-w-7xl lg:mx-auto p-4  lg:px-4 lg:py-8">
             <div className="grid lg:grid-cols-2 gap-4 lg:gap-12">
               {/* Product Images */}
               <div className="lg:space-y-4 space-y-2">
