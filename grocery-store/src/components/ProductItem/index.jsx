@@ -175,7 +175,7 @@ const ProductItem = (props) => {
                 text-[#28a745] font-semibold
                 xl:px-2 px-3 xl:py-2 py-1 rounded-md  
                 shadow-md hover:shadow-lg
-                transform hover:scale-105 text-[12px] xl:text-[15px]
+                transform hover:scale-105 text-[12px] lg:text-[13px]
                 transition duration-200 ease-in-out
               "
             >
