@@ -62,12 +62,14 @@ const RecipeCard = ({ recipe }) => {
 
         {/* Product badges */}
         <div className="flex flex-wrap gap-1">
-          {recipe.products.slice(0, 4).map((product,idx) => (
+          {recipe.products.slice(0, 3).map((product,idx) => (
             <span
               key={idx}
               className="inline-block text-xs  bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 px-2 py-0.5 rounded"
             >
-              {product.name.substr(0,8)}
+              {product.name.substr(0,6)}
+
+
             </span>
           ))}
 

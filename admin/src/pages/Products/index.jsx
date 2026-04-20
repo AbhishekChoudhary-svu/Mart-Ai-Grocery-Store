@@ -12,8 +12,8 @@ const Products = () => {
 
   const [productData, setProductData] = useState([]);
   const [cateData, setCateData] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedSubCategory, setSelectedSubCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [sortedIds, setSortedIds] = useState([]);
 
 
@@ -63,16 +63,16 @@ const Products = () => {
     
       // filter by order ID, customer name, email etc. (you can customize)
  const filteredproducts = productData?.filter(product =>
-   product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-   product.brand?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-   product.catName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-   product.subCatName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-   product.description?.toLowerCase().includes(searchQuery.toLowerCase())
+   product?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+   product?.brand?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+   product?.catName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+   product?.subCatName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+   product?.description?.toLowerCase().includes(searchQuery.toLowerCase())
  );
  
- const totalPages = Math.ceil(filteredproducts.length / perPage);
+ const totalPages = Math.ceil(filteredproducts?.length / perPage);
  
- const paginatedProducts = filteredproducts.slice(
+ const paginatedProducts = filteredproducts?.slice(
    (currentPage - 1) * perPage,
    currentPage * perPage
  );
@@ -94,7 +94,7 @@ const Products = () => {
 
   const handleSelectAll = (e)=>{
     const isChecked = e.target.checked;
-    const updatedItem = productData.map((item)=>({
+    const updatedItem = productData?.map((item)=>({
       ...item,
       checked:isChecked
     }))
@@ -108,12 +108,12 @@ const Products = () => {
   }
 
   const handleCheckBoxChange = (e,id,index)=>{
-    const updatedItem=productData.map((item)=>
-    item._id === id ? {...item, checked:!item.checked}:item
+    const updatedItem=productData?.map((item)=>
+    item?._id === id ? {...item, checked:!item.checked}:item
     )
     setProductData(updatedItem)
 
-    const selectedIds =updatedItem.filter((item)=> item.checked).map((item)=>item._id).sort((a,b)=>a-b)
+    const selectedIds =updatedItem.filter((item)=> item?.checked).map((item)=>item?._id).sort((a,b)=>a-b)
     setSortedIds(selectedIds)
 
   }
@@ -179,7 +179,7 @@ const Products = () => {
         className="border border-gray-300 px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 text-sm font-medium w-full"
       >
         <option value="">-- Select Category --</option>
-        {cateData.map((cat) => (
+        {cateData?.map((cat) => (
           <option key={cat?._id} value={cat?._id}>
             {cat?.name}
           </option>
@@ -196,10 +196,10 @@ const Products = () => {
         className="border border-gray-300 px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 text-sm font-medium w-full"
       >
         <option value="">-- Select Sub-Category --</option>
-        {cateData.map((cat) =>
+        {cateData?.map((cat) =>
           cat?.subCategories?.map((subCat) => (
-            <option key={subCat._id} value={subCat._id}>
-              {subCat.name}
+            <option key={subCat?._id} value={subCat?._id}>
+              {subCat?.name}
             </option>
           ))
         )}
@@ -226,8 +226,8 @@ const Products = () => {
               type="checkbox"
               onChange={handleSelectAll}
               checked={
-                productData.length > 0
-                  ? productData.every((item) => item.checked)
+                productData?.length > 0
+                  ? productData?.every((item) => item.checked)
                   : false
               }
             />
@@ -242,8 +242,8 @@ const Products = () => {
         </tr>
       </thead>
       <tbody>
-        {paginatedProducts.length !== 0 ? (
-          paginatedProducts.map((product, idx) => (
+        {paginatedProducts?.length > 0 ? (
+          paginatedProducts?.map((product, idx) => (
             <tr
               key={idx}
               className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}

@@ -15,6 +15,8 @@ import homeSliderRouter from './routes/homeSlider.route.js';
 import adsBannerRouter from './routes/adsBanner.route.js';
 import orderRouter from './routes/order.route.js';
 import recipeRouter from './routes/recipe.route.js';
+import { streamText } from 'ai';
+import { groq } from '@ai-sdk/groq';
 dotenv.config();
 
 const app = express();
@@ -41,6 +43,30 @@ app.use('/api/homeSlides', homeSliderRouter);
 app.use('/api/Banner', adsBannerRouter);
 app.use('/api/order', orderRouter);
 app.use('/api/recipe', recipeRouter);
+app.post('/api/chat', async (req, res) => {
+  try {
+    const { messages } = req.body;
+
+    const result = await streamText({
+      model: groq('llama-3.3-70b-versatile'),
+      messages,
+    });
+
+    let fullResponse = "";
+    for await (const textPart of result.textStream) {
+      fullResponse += textPart;
+    }
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({ 
+      content: [{ text: fullResponse }]  
+    }));
+
+  } catch (error) {
+    console.error("API Error:", error);
+    res.status(500).send(JSON.stringify({ error: "Failed to process request" }));
+  }
+});
 
 
 connectDB().then(() => {

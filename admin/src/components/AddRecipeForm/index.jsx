@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { CloudUpload, X } from "lucide-react";
+import { CloudUpload, X, Sparkles, Loader2, CircleCheck, CircleX } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MyContext } from "../../App";
 import {
@@ -7,43 +7,47 @@ import {
   editData,
   fetchDataFromApi,
   uploadAdminImages,
-  deleteImages
+  deleteImages,
 } from "../../utils/api";
 import SearchBox from "../SearchBox";
 
 const AddRecipeForm = () => {
-  const { id } = useParams(); // edit mode if ID exists
+  const { id } = useParams();
   const isEditMode = !!id;
   const context = useContext(MyContext);
   const history = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-   const [currentPage, setCurrentPage] = useState(1);
-    const perPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+  const perPage = 5;
 
   const [formFields, setFormFields] = useState({
     name: "",
     description: "",
     images: [],
-    products: [], // product IDs
+    products: [],
   });
-  const [preview, setPreview] = useState([]); // local preview of images
+  const [preview, setPreview] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [productsData, setProductsData] = useState([]);
 
-  const [productsData, setProductsData] = useState([]); // all products to select
+  // ── AI Generator state ──────────────────────────────────────
+  const [aiQuery, setAiQuery] = useState("");
+  const [generating, setGenerating] = useState(false);
+  const [aiMatchResults, setAiMatchResults] = useState(null);
+  // { matched: [{_id, name, images}], notFound: [string] }
 
-  // Load products list
   useEffect(() => {
     fetchDataFromApi("/api/product").then((res) => {
       setProductsData(res?.products || []);
     });
   }, []);
+
   const filteredProduct = productsData.filter(
-    (recipe) =>
-      recipe.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      recipe.description.toLowerCase().includes(searchQuery.toLowerCase())
+    (p) =>
+      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.description?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // If editing, load recipe data
   useEffect(() => {
     if (id) {
       fetchDataFromApi(`/api/recipe/${id}`).then((res) => {
@@ -63,60 +67,145 @@ const AddRecipeForm = () => {
     }
   }, [id]);
 
-  // Handle text input change
+  const apiUrl = import.meta.env.VITE_API_URL;
+  // ── AI Generate ─────────────────────────────────────────────
+  const handleAiGenerate = async () => {
+    if (!aiQuery.trim()) {
+      context.openAlertBox("error", "Enter a recipe name to generate");
+      return;
+    }
+    if (productsData.length === 0) {
+      context.openAlertBox("error", "Products are still loading, please wait");
+      return;
+    }
+
+    setGenerating(true);
+    setAiMatchResults(null);
+
+    const productList = productsData
+      .map((p) => `- ID: ${p._id} | Name: ${p.name}`)
+      .join("\n");
+
+    const prompt = `You are a recipe assistant. The user wants to create a recipe called "${aiQuery}".
+
+Here are the available products in the database:
+${productList}
+
+Your task:
+1. Generate a clean recipe name (use the user input, fix spelling/casing if needed).
+2. Write a 1-2 sentence description for this recipe.
+3. From the product list above, select all product IDs that are relevant ingredients or components for this recipe.
+4. List any additional ingredients you would recommend that are NOT in the database (names only, no IDs).
+
+Respond ONLY with a valid JSON object, no markdown, no backticks. Exact shape:
+{
+  "name": "Recipe Name",
+  "description": "Short 1-2 sentence description.",
+  "matchedProductIds": ["id1", "id2"],
+  "notFoundProducts": ["Ingredient A", "Ingredient B"]
+}`;
+
+    try {
+      const response = await fetch(`${apiUrl}/api/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [{ role: "user", content: prompt }],
+        }),
+      });
+
+      const data = await response.json();
+      const raw = data.content?.map((i) => i.text || "").join("") || "";
+      const clean = raw.replace(/```json|```/g, "").trim();
+      const parsed = JSON.parse(clean);
+
+      const matchedProducts = productsData.filter((p) =>
+  parsed.matchedProductIds?.includes(p._id)
+);
+
+// Build enriched description
+const foundList = matchedProducts.map((p) => `• ${p.name}`).join("\n");
+const notFoundList = (parsed.notFoundProducts || []).map((n) => `• ${n}`).join("\n");
+
+const enrichedDescription = `${parsed.description}
+
+✅ Ingredients available in our store:
+${foundList || "• None found"}
+
+❌ Recommended but not in store:
+${notFoundList || "• All ingredients are available!"}`;
+
+// Auto-fill name, description, and select matched products
+setFormFields((prev) => ({
+  ...prev,
+  name: parsed.name || prev.name,
+  description: enrichedDescription,
+  products: matchedProducts.map((p) => p._id),
+}));
+
+      setAiMatchResults({
+        matched: matchedProducts,
+        notFound: parsed.notFoundProducts || [],
+      });
+
+      context.openAlertBox("success", "Recipe generated successfully!");
+    } catch (err) {
+      console.error("AI Generate error:", err);
+      context.openAlertBox("error", "Failed to generate recipe. Try again.");
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  // ── Standard handlers (unchanged) ───────────────────────────
   const onChangeInput = (e) => {
     const { name, value } = e.target;
     setFormFields((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle selecting products (checkbox multi-select)
   const toggleProductSelection = (productId) => {
     setFormFields((prev) => {
       const products = prev.products.includes(productId)
-        ? prev.products.filter((id) => id !== productId)
+        ? prev.products.filter((pid) => pid !== productId)
         : [...prev.products, productId];
       return { ...prev, products };
     });
   };
 
-const onChangeFile = async (e, apiEndPoints) => {
-  try {
-    const files = e.target.files;
-    const formData = new FormData();
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      if (
-        file &&
-        ["image/jpg", "image/jpeg", "image/png", "image/webp"].includes(file.type)
-      ) {
-        formData.append("images", file);
-      } else {
-        context.openAlertBox("error", "Invalid image type");
-        return;
+  const onChangeFile = async (e, apiEndPoints) => {
+    try {
+      const files = e.target.files;
+      const formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (
+          file &&
+          ["image/jpg", "image/jpeg", "image/png", "image/webp"].includes(file.type)
+        ) {
+          formData.append("images", file);
+        } else {
+          context.openAlertBox("error", "Invalid image type");
+          return;
+        }
       }
+      setUploading(true);
+      const res = await uploadAdminImages(apiEndPoints, formData);
+      const uploaded = res?.images || res?.data?.images || [];
+      const newImages = [...formFields.images, ...uploaded];
+      setFormFields((prev) => ({ ...prev, images: newImages }));
+      setPreview(newImages);
+      setUploading(false);
+    } catch (error) {
+      console.error(error);
+      setUploading(false);
+      context.openAlertBox("error", "Failed to upload images");
     }
+  };
 
-    setUploading(true);
-    const res = await uploadAdminImages(apiEndPoints, formData);
-    const uploaded = res?.images || res?.data?.images || [];
-
-    const newImages = [...formFields.images, ...uploaded];
-    setFormFields((prev) => ({ ...prev, images: newImages }));
-    setPreview(newImages);
-    setUploading(false);
-  } catch (error) {
-    console.error(error);
-    setUploading(false);
-    context.openAlertBox("error", "Failed to upload images");
-  }
-};
-
-
-  // Remove image
   const removeImage = async (imgUrl, index) => {
-    const res = await deleteImages(`/api/recipe/delete-recipe-Image?img=${encodeURIComponent(imgUrl)}`);
-    
+    const res = await deleteImages(
+      `/api/recipe/delete-recipe-Image?img=${encodeURIComponent(imgUrl)}`
+    );
     if (res?.data.success) {
       const updatedImages = preview.filter((_, i) => i !== index);
       setPreview(updatedImages);
@@ -127,21 +216,18 @@ const onChangeFile = async (e, apiEndPoints) => {
     }
   };
 
-  // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formFields.name || !formFields.description) {
       context.openAlertBox("error", "Name and description are required");
       return;
     }
-    if (formFields.images.length === 0) {
-      context.openAlertBox("error", "Upload at least one image");
-      return;
-    }
-
+    // if (formFields.images.length === 0) {
+    //   context.openAlertBox("error", "Upload at least one image");
+    //   return;
+    // }
     const endpoint = isEditMode ? `/api/recipe/update/${id}` : `/api/recipe/create`;
     const method = isEditMode ? editData : postData;
-
     const res = await method(endpoint, formFields);
     if (res) {
       context.openAlertBox("success", res.message || "Success");
@@ -156,8 +242,97 @@ const onChangeFile = async (e, apiEndPoints) => {
       <h2 className="text-2xl font-semibold mb-4">
         {isEditMode ? "Edit Recipe" : "Add New Recipe"}
       </h2>
+
+      {/* ── AI Generator Bar ──────────────────────────────────── */}
+      <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-lg">
+        <p className="text-sm font-medium text-green-700 mb-2 flex items-center gap-1">
+          <Sparkles className="w-4 h-4" />
+          AI Recipe Generator
+        </p>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={aiQuery}
+            onChange={(e) => setAiQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleAiGenerate()}
+            placeholder="Type a recipe name (e.g. Mango Smoothie Bowl)..."
+            className="flex-1 p-2 border border-purple-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-green-400 bg-white"
+          />
+          <button
+            type="button"
+            onClick={handleAiGenerate}
+            disabled={generating}
+            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-purple-300 text-white px-4 py-2 rounded text-sm font-medium transition-colors"
+          >
+            {generating ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-4 h-4" />
+                Generate
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Match Results Panel */}
+        {aiMatchResults && (
+          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+            {/* Found in DB */}
+            <div className="bg-white rounded-md border border-green-200 p-3">
+              <p className="text-xs font-semibold text-green-700 mb-2 flex items-center gap-1">
+                <CircleCheck className="w-3.5 h-3.5" />
+                Found in database ({aiMatchResults.matched.length})
+              </p>
+              {aiMatchResults.matched.length === 0 ? (
+                <p className="text-xs text-gray-400 italic">No matching products found</p>
+              ) : (
+                <ul className="space-y-1">
+                  {aiMatchResults.matched.map((p) => (
+                    <li key={p._id} className="flex items-center gap-2 text-xs text-gray-700">
+                      <img
+                        src={p.images?.[0]}
+                        alt={p.name}
+                        className="w-6 h-6 rounded object-cover"
+                      />
+                      <span className="truncate">{p.name}</span>
+                      <span className="ml-auto text-green-600 text-[10px] bg-green-50 px-1.5 py-0.5 rounded">
+                        selected
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            {/* Not found in DB */}
+            <div className="bg-white rounded-md border border-red-200 p-3">
+              <p className="text-xs font-semibold text-red-600 mb-2 flex items-center gap-1">
+                <CircleX className="w-3.5 h-3.5" />
+                Not in database ({aiMatchResults.notFound.length})
+              </p>
+              {aiMatchResults.notFound.length === 0 ? (
+                <p className="text-xs text-gray-400 italic">All ingredients found!</p>
+              ) : (
+                <ul className="space-y-1">
+                  {aiMatchResults.notFound.map((name, i) => (
+                    <li key={i} className="text-xs text-gray-500 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0" />
+                      {name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ── Main Form (unchanged) ─────────────────────────────── */}
       <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
-        {/* Name */}
         <div>
           <label className="block font-medium">Recipe Name</label>
           <input
@@ -170,7 +345,6 @@ const onChangeFile = async (e, apiEndPoints) => {
           />
         </div>
 
-        {/* Description */}
         <div>
           <label className="block font-medium">Description</label>
           <textarea
@@ -180,10 +354,9 @@ const onChangeFile = async (e, apiEndPoints) => {
             rows={4}
             className="w-full mt-1 p-2 border border-gray-300 rounded"
             required
-          ></textarea>
+          />
         </div>
 
-        {/* Image Upload */}
         <div>
           <label className="block font-medium mb-1">Upload Images</label>
           <div className="relative flex flex-col items-center justify-center border-2 border-dashed border-gray-400 rounded-md p-10 cursor-pointer hover:border-black transition">
@@ -193,18 +366,18 @@ const onChangeFile = async (e, apiEndPoints) => {
               type="file"
               multiple
               accept="image/*"
-              onChange={(e) =>
-                    onChangeFile(e, "/api/recipe/upload-images")
-                  }
+              onChange={(e) => onChangeFile(e, "/api/recipe/upload-images")}
               className="opacity-0 absolute w-full h-full top-0 left-0 cursor-pointer"
             />
           </div>
         </div>
 
-        {/* Preview */}
         <div className="grid md:grid-cols-4 grid-cols-2 gap-3">
           {preview.map((img, idx) => (
-            <div key={idx} className="relative bg-gray-200 rounded-md w-full h-[140px] flex items-center justify-center overflow-hidden">
+            <div
+              key={idx}
+              className="relative bg-gray-200 rounded-md w-full h-[140px] flex items-center justify-center overflow-hidden"
+            >
               <img src={img} alt={`Uploaded ${idx}`} className="object-cover w-full h-full" />
               <button
                 type="button"
@@ -217,19 +390,19 @@ const onChangeFile = async (e, apiEndPoints) => {
           ))}
         </div>
 
-        {/* Select Products */}
         <div>
-          
-          <label className="block text-center font-medium mb-2">Search & Select Products for this Recipe</label>
-          <div className="mb-4 ">
-        <SearchBox
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          setCurrentPage={setCurrentPage}
-          placeholder="Search Product For Recipe..."
-        />
-      </div>
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-2 max-h-[250px] overflow-y-auto border rounded p-3">
+          <label className="block text-center font-medium mb-2">
+            Search & Select Products for this Recipe
+          </label>
+          <div className="mb-4">
+            <SearchBox
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              setCurrentPage={setCurrentPage}
+              placeholder="Search Product For Recipe..."
+            />
+          </div>
+          <div className="grid grid-cols-1 gap-2 max-h-[250px] overflow-y-auto border rounded p-3">
             {filteredProduct.map((product) => (
               <label key={product._id} className="flex items-center space-x-4">
                 <input
@@ -244,7 +417,6 @@ const onChangeFile = async (e, apiEndPoints) => {
           </div>
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={uploading}
