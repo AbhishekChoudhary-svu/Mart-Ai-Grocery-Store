@@ -1,19 +1,29 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom"; // ✅ add useLocation
 import { ShoppingCart } from "lucide-react";
 import { fetchDataFromApi } from "../../utils/api";
 import { MyContext } from "../../App";
+
 const RecipeDetailPage = () => {
   const context = useContext(MyContext);
   const { id } = useParams();
+  const location = useLocation(); // ✅ read AI state
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [productData, setProductData] = useState(null);
 
   useEffect(() => {
-    fetchDataFromApi(`/api/recipe/${id}`).then((res) => {
-      setProductData(res);
-    });
-  }, [id]);
+    // If AI generated data passed via navigate state, use it directly
+    if (location.state?.products) {
+      setProductData(location.state);
+      return;
+    }
+    // Otherwise fetch from API as normal
+    if (id) {
+      fetchDataFromApi(`/api/recipe/${id}`).then((res) => {
+        setProductData(res);
+      });
+    }
+  }, [id, location.state]);
 
   const recipe = productData;
 
@@ -22,33 +32,124 @@ const RecipeDetailPage = () => {
   }
 
   const totalPrice =
-    recipe?.products?.reduce((sum, item) => sum + item.price, 0) || 0;
+    recipe?.products?.reduce((sum, item) => sum + (item.price || 0), 0) || 0;
 
   const handleAddAllToCart = (products, userId) => {
     setIsAddingToCart(true);
-    // fake delay
     context.addMultipleToCartItem(products, userId);
-
     setIsAddingToCart(false);
+  };
+
+  //  Smart description renderer
+  const renderDescription = (desc) => {
+    let data = null;
+
+    try {
+      data = JSON.parse(desc); // JSON recipes
+    } catch {
+      // Plain text — extract each section by splitting on ✅ and ❌
+      const aboutPart = desc.split(/✅|❌/)[0].trim();
+
+      const inStorePart = desc.includes("✅")
+        ? desc
+            .split("✅")[1]
+            ?.split("❌")[0]
+            ?.replace(/Ingredients available in our store[:\s]*/i, "")
+            .split("•")
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : recipe?.products?.map((p) => p.name) || [];
+
+      const notInStorePart = desc.includes("❌")
+        ? desc
+            .split("❌")[1]
+            ?.replace(/Recommended but not in store[:\s]*/i, "")
+            .split("•")
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : [];
+
+      data = {
+        about: aboutPart,
+        inStore: inStorePart || [],
+        notInStore: notInStorePart || [],
+      };
+    }
+
+    return (
+      <div className="space-y-3 text-sm sm:text-base text-gray-700">
+        <p className="leading-relaxed">{data.about}</p>
+
+        {data.inStore?.length > 0 && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+            <p className="font-semibold text-green-700 mb-2 flex items-center gap-1">
+              ✅ Available in our store ({data.inStore.length})
+            </p>
+            <ul className="space-y-1">
+              {data.inStore.map((item, i) => (
+                <li
+                  key={i}
+                  className="text-gray-600 text-sm flex items-center gap-1"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {data.notInStore?.length > 0 && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+            <p className="font-semibold text-red-600 mb-2 flex items-center gap-1">
+              ❌ Recommended but not in store ({data.notInStore.length})
+            </p>
+            {/* ✅ 2-column grid to save vertical space */}
+            <ul className="grid grid-cols-2 gap-x-4 gap-y-1">
+              {data.notInStore.map((item, i) => (
+                <li
+                  key={i}
+                  className="text-gray-500 text-sm flex items-center gap-1"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
     <div className="min-h-screen bg-gray-100">
       <main className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
+        {/*  AI badge — only shown for AI generated recipes */}
+        {location.state?.products && (
+          <div className="inline-flex items-center gap-1 text-xs bg-purple-100 text-purple-700 border border-purple-200 px-2 py-1 rounded mb-4">
+            ✨ AI Generated Recipe
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-          {/* Left - Image & badges */}
+          {/* Left */}
           <div className="relative flex flex-col gap-5 overflow-hidden rounded-lg">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
               {recipe.name}
             </h1>
-            <img
-              src={recipe.images[0]}
-              alt={recipe.name}
-              className="w-full h-64 sm:h-80 md:h-80 object-cover rounded-2xl"
-            />
-            <p className="text-gray-700 whitespace-pre-wrap  leading-relaxed text-sm sm:text-base">
-              {recipe.description?.substring(0, 1000)}
-            </p>
+
+            {recipe.images?.length > 0 && (
+              <img
+                src={recipe.images[0]}
+                alt={recipe.name}
+                className="w-full h-64 sm:h-80 md:h-80 object-cover rounded-2xl"
+              />
+            )}
+
+            {/* ✅ Smart description */}
+            {renderDescription(recipe.description)}
+
             <div className="absolute top-3 left-3 flex flex-col gap-1">
               {recipe.isNew && (
                 <span className="inline-block bg-green-500 text-white text-xs px-2 py-1 rounded">
@@ -63,9 +164,9 @@ const RecipeDetailPage = () => {
             </div>
           </div>
 
-          {/* Ingredients grid */}
+          {/* Right - Ingredients */}
           <section className="mt-2">
-            <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-1 ">
+            <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-1">
               Ingredients Included
             </h3>
             <p className="mb-4 sm:mb-6 font-[500] text-xs lg:text-sm">
@@ -77,7 +178,7 @@ const RecipeDetailPage = () => {
                 <Link key={idx} to={`/product/${ing._id}`}>
                   <div className="border border-green-100 rounded-lg p-3 sm:p-4 text-center bg-gray-50 hover:shadow transition-shadow">
                     <img
-                      src={ing.images[0]}
+                      src={ing.images?.[0]}
                       alt={ing.name}
                       className="w-14 h-14 sm:w-16 sm:h-16 object-cover mx-auto mb-2 rounded"
                     />
@@ -85,7 +186,7 @@ const RecipeDetailPage = () => {
                       {ing.name}
                     </h4>
                     <span className="font-semibold text-green-700 text-xs sm:text-sm">
-                      ₹ {ing.price.toFixed(2)}
+                      ₹ {ing.price?.toFixed(2)}
                     </span>
                   </div>
                 </Link>
@@ -94,8 +195,7 @@ const RecipeDetailPage = () => {
           </section>
         </div>
 
-        
-
+        {/* Price & Cart */}
         <div className="flex flex-col sm:flex-row gap-4 mt-5 sm:gap-6">
           <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-4 flex-1">
             <p className="text-gray-600 text-sm sm:text-base font-medium">

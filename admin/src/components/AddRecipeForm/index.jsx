@@ -255,7 +255,7 @@ setFormFields((prev) => ({
             value={aiQuery}
             onChange={(e) => setAiQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleAiGenerate()}
-            placeholder="Type a recipe name (e.g. Mango Smoothie Bowl)..."
+            placeholder="Type a recipe name (e.g. Chicken Briyani)..."
             className="flex-1 p-2 border border-purple-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-green-400 bg-white"
           />
           <button

@@ -27,6 +27,7 @@ import RecipeDetailPage from "./Pages/RecipeDetailPage";
 
 
 
+
 export const MyContext = createContext();
 
 const Layout = () => (
@@ -237,6 +238,7 @@ function App() {
     <Route path="/products" element={<ProductListing />} />
     <Route path="/recipes" element={<RecipePage />} />
     <Route path="/recipe/:id" element={<RecipeDetailPage />} />
+    <Route path="/recipe/ai-preview" element={<RecipeDetailPage />} />
     <Route path="/product/:id" element={<ProductDetails />} />
     <Route path="/cart" element={<CartPage />} />
     <Route path="/checkout" element={<CheckoutPage />} />
